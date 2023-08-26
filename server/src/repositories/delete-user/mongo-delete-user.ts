@@ -7,7 +7,7 @@ export class MongoDeleteUserRepository implements IDeleteUserRepository {
   async deleteUser(id: string): Promise<User> {
     const user = await MongoClient.db
       .collection<Omit<User, "id">>("users")
-      .findOne({ _id: new ObjectId() });
+      .findOne({ _id: new ObjectId(id) });
 
     if (!user) {
       throw new Error("User not Found");
