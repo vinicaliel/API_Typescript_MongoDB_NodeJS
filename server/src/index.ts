@@ -2,11 +2,13 @@ import express from "express";
 import { getUsersController } from "./controllers/getUsers/getUsers";
 import { mongoGetUsersRepositories } from "./repositories/getUsers/mongo-get-users";
 import { MongoClient } from "./database/mongo";
+import { MongoCreateUserRepository } from "./repositories/create-user/create-mongo-User";
+import { CreateUserController } from "./controllers/create-user/create-user";
 
 const main = async () => {
-    
-    
-    const app = express();
+  const app = express();
+
+  app.use(express.json())
 
   await MongoClient.connect();
 
@@ -17,6 +19,20 @@ const main = async () => {
     const { body, statusCode } = await GetUsersController.handle();
 
     res.send(body).status(statusCode);
+  });
+
+  app.post("/users", async (req, res) => {
+    const mongoCreateUserRepository = new MongoCreateUserRepository();
+
+    const createUserController = new CreateUserController(
+      mongoCreateUserRepository
+    );
+
+    const { body, statusCode } = await createUserController.handle({
+      body: req.body,
+     });
+
+     res.send(body).status(statusCode)
   });
 
   const port = process.env.PORT || 5000;
