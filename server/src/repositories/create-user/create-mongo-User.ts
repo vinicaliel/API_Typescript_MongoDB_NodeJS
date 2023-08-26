@@ -12,15 +12,15 @@ export class MongoCreateUserRepository implements IcreateUserRepository {
       .insertOne(params);
 
     const user = await MongoClient.db
-      .collection<Omit<User , "id">>("users") 
+      .collection<Omit<User, "id">>("users")
       .findOne({ _id: insertedId });
 
-      if(!user){
-        throw new Error('User not created')
-      }
+    if (!user) {
+      throw new Error("User not created");
+    }
 
-      const {_id , ...rest } = user 
+    const { _id, ...rest } = user;
 
-      return {id: _id.toHexString(), ...rest}
+    return { id: _id.toHexString(), ...rest };
   }
 }
