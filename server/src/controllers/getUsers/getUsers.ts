@@ -10,8 +10,9 @@ export class getUsersController implements IGetUsersController {
       return {
         statusCode: 200,
         body: users,
-      };
-    } catch (err) {
+      }
+    } catch (error)
+     {
       
       return {
         statusCode: 500,

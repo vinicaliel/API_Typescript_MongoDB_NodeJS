@@ -4,11 +4,12 @@ import { mongoGetUsersRepositories } from "./repositories/getUsers/mongo-get-use
 import { MongoClient } from "./database/mongo";
 import { MongoCreateUserRepository } from "./repositories/create-user/create-mongo-User";
 import { CreateUserController } from "./controllers/create-user/create-user";
-
+import { config } from "dotenv";
 const main = async () => {
+  config();
   const app = express();
 
-  app.use(express.json())
+  app.use(express.json());
 
   await MongoClient.connect();
 
@@ -30,12 +31,12 @@ const main = async () => {
 
     const { body, statusCode } = await createUserController.handle({
       body: req.body,
-     });
+    });
 
-     res.send(body).status(statusCode)
+    res.send(body).status(statusCode);
   });
 
-  const port = process.env.PORT || 5000;
+  const port = process.env.PORT;
   app.listen(port, () => console.log("servidor aberto na porta " + port));
 };
 
