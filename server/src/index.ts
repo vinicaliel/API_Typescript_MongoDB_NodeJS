@@ -5,6 +5,8 @@ import { MongoClient } from "./database/mongo";
 import { MongoCreateUserRepository } from "./repositories/create-user/create-mongo-User";
 import { CreateUserController } from "./controllers/create-user/create-user";
 import { config } from "dotenv";
+import { MongoUpdateUserRepository } from "./repositories/update-user/update-user";
+import { UpdateUserController } from "./controllers/update-user/update-user";
 const main = async () => {
   config();
   const app = express();
@@ -33,9 +35,21 @@ const main = async () => {
       body: req.body,
     });
 
-    res.status(statusCode).send(body)
+    res.status(statusCode).send(body);
   });
 
+  app.patch('/users/:id' , async(req , res)=>{
+    const mongoUpdateUserRepository = new MongoUpdateUserRepository()
+
+    const updateUserController = new UpdateUserController(mongoUpdateUserRepository)
+
+    const {body , statusCode} = await updateUserController.handle({
+      body: req.body,
+      params: req.params
+    })
+
+    res.status(statusCode).send(body)
+  })
   const port = process.env.PORT;
   app.listen(port, () => console.log("servidor aberto na porta " + port));
 };
